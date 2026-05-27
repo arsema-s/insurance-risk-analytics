@@ -1,0 +1,4 @@
+UnderwrittenCoverID|PolicyID|TransactionMonth|TotalPremium|TotalClaims|RegistrationYear|VehicleIntroDate|AlarmImmobiliser|TrackingDevice
+145249|12827|2015-03-01 00:00:00|21.929824561403|0|2004|6/2002|Yes|No
+145250|12828|2015-04-01 00:00:00|45.500000000000|1500|2010|7/2010|No|Yes
+145251|12829|2015-05-01 00:00:00|80.000000000000|5000|2012|5/2012|Yes|Yes

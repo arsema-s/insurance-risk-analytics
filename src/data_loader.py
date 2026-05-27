@@ -13,7 +13,7 @@ def load_data(path: str) -> pd.DataFrame:
     # CLEAN OBJECT COLUMNS
 
     object_cols = df.select_dtypes(
-        include="object"
+        include=["object", "string"]
     ).columns
 
     for col in object_cols:
@@ -37,10 +37,21 @@ def load_data(path: str) -> pd.DataFrame:
     ]
 
     for col in date_cols:
-        df[col] = pd.to_datetime(
-            df[col],
-            errors="coerce"
-        )
+        if col in df.columns:
+            if "TransactionMonth" in df.columns:
+
+                df["TransactionMonth"] = pd.to_datetime(
+                    df["TransactionMonth"],
+                    format="%Y-%m-%d %H:%M:%S",
+                    errors="coerce"
+    )
+            if "VehicleIntroDate" in df.columns:
+
+                df["VehicleIntroDate"] = pd.to_datetime(
+                    df["VehicleIntroDate"],
+                    format="%m/%Y",
+                    errors="coerce"
+                )
 
     # BOOLEAN CONVERSION
 
@@ -63,7 +74,8 @@ def load_data(path: str) -> pd.DataFrame:
     }
 
     for col in binary_cols:
-        df[col] = df[col].map(mapping)
+        if col in df.columns:
+            df[col] = df[col].map(mapping)
 
     # NUMERIC CONVERSION
 
@@ -81,36 +93,43 @@ def load_data(path: str) -> pd.DataFrame:
     ]
 
     for col in numeric_cols:
-        df[col] = pd.to_numeric(
-            df[col],
-            errors="coerce"
-        )
+        if col in df.columns:
+            df[col] = pd.to_numeric(
+                df[col],
+                errors="coerce"
+            )
 
     # FEATURE ENGINEERING
 
-    df["LossRatio"] = (
-        df["TotalClaims"] /
-        df["TotalPremium"]
-    )
+    if (
+        "TotalClaims" in df.columns and
+        "TotalPremium" in df.columns
+    ):
 
-    df["LossRatio"] = df[
-        "LossRatio"
-    ].replace(
-        [np.inf, -np.inf],
-        np.nan
-    )
+        df["LossRatio"] = (
+            df["TotalClaims"] /
+            df["TotalPremium"]
+        )
 
-    df["Margin"] = (
-        df["TotalPremium"] -
-        df["TotalClaims"]
-    )
+        df["LossRatio"] = df[
+            "LossRatio"
+        ].replace(
+            [np.inf, -np.inf],
+            np.nan
+        )
 
-    df["VehicleAge"] = (
-        2015 - df["RegistrationYear"]
-    )
+        df["Margin"] = (
+            df["TotalPremium"] -
+            df["TotalClaims"]
+        )
 
-    df["HasClaim"] = (
-        df["TotalClaims"] > 0
-    ).astype(int)
+        df["HasClaim"] = (
+            df["TotalClaims"] > 0
+        ).astype(int)
 
+    if "RegistrationYear" in df.columns:
+
+        df["VehicleAge"] = (
+            2015 - df["RegistrationYear"]
+        )
     return df
