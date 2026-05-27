@@ -5,6 +5,25 @@ import seaborn as sns
 
 def plot_distribution(df, column, bins=50):
 
+    """
+    Plot the distribution of a numeric feature using a histogram and KDE.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input dataframe.
+
+    column : str
+        Column to visualize.
+
+    bins : int, optional
+        Number of histogram bins, by default 50.
+
+    Returns
+    -------
+    None
+    """
+
     plt.figure(figsize=(12, 6))
 
     sns.histplot(
@@ -24,6 +43,22 @@ def plot_distribution(df, column, bins=50):
 
 def plot_boxplot(df, column):
 
+    """
+    Plot a boxplot for detecting outliers in a numeric feature.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input dataframe.
+
+    column : str
+        Column to visualize.
+
+    Returns
+    -------
+    None
+    """
+
     plt.figure(figsize=(12, 6))
 
     sns.boxplot(
@@ -36,6 +71,20 @@ def plot_boxplot(df, column):
 
 
 def missing_values_summary(df):
+
+    """
+    Generate a summary table of missing values in the dataset.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input dataframe.
+
+    Returns
+    -------
+    pd.DataFrame
+        Table containing missing value counts and percentages.
+    """
 
     missing = (
         df.isnull()
