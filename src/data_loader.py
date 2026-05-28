@@ -1,14 +1,57 @@
 import pandas as pd
 import numpy as np
+import os
 
 
 def load_data(path: str) -> pd.DataFrame:
 
-    df = pd.read_csv(
-        path,
-        sep="|",
-        low_memory=False
-    )
+    """
+    Load and preprocess the insurance dataset.
+
+    This function:
+    - Loads the raw pipe-delimited dataset
+    - Cleans missing values
+    - Converts numeric and datetime columns
+    - Encodes binary variables
+    - Engineers analytical features
+
+    Parameters
+    ----------
+    path : str
+        Path to the raw insurance dataset.
+
+    Returns
+    -------
+    pd.DataFrame
+        Cleaned dataframe with engineered features.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the dataset file does not exist.
+
+    ValueError
+        If the dataset cannot be loaded correctly.
+    """
+
+    if not os.path.exists(path):
+        raise FileNotFoundError(
+            f"Dataset not found: {path}"
+        )
+
+    try:
+
+        df = pd.read_csv(
+            path,
+            sep="|",
+            low_memory=False
+        )
+
+    except Exception as e:
+
+        raise ValueError(
+            f"Error loading dataset: {e}"
+        )
 
     # CLEAN OBJECT COLUMNS
 
